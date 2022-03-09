@@ -1,3 +1,146 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#root {
+    --border-color: rgb(104, 104, 104);
+    --letter-color: rgb(235, 235, 235);
+}
+
+* {
+    transition: 300ms;
+}
+
+html {
+    background-color: rgb(37, 37, 37);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.6rem;
+}
+
+input {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    text-transform: capitalize;
+    font-size: 10px;
+}
+
+input:focus-within {
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    text-transform: capitalize;
+    outline: none;
+}
+
+.words {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    border-radius: 11px;
+    padding: 10px;
+    margin: 5px;
+    text-transform: capitalize;
+    background-color: rgb(76, 24, 196);
+    padding: 10px 50px 10px 50px;
+    font-weight: bold;
+    color: var(--letter-color);
+    width: 100%;
+}
+
+button:hover {
+    transition: 300ms;
+    opacity: .8;
+
+}
+
+.letter-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    text-align: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.letter {
+    border: 1px solid var(--border-color);
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    line-height: 2.5rem;
+    border-radius: .3rem;
+    color: var(--letter-color);
+}
+
+.correct {
+    border-color: aquamarine;
+}
+
+.close {
+    border-color: yellow
+}
+
+.modal {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    background-color: rgb(32, 28, 36);
+    padding: 30px;
+    border-radius: 10px;
+    margin: 0 10px 0 10px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.modal h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+}
+
+.modal h2 {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.modal button {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.buttons {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
