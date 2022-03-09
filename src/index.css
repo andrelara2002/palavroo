@@ -112,6 +112,7 @@ button:hover {
     margin: 0 10px 0 10px;
     justify-content: flex-start;
     align-items: center;
+    z-index: 1;
 }
 
 .modal h1 {
@@ -131,7 +132,6 @@ button:hover {
 .modal button {
     margin-left: 0;
     margin-right: 0;
-    z-index: 9999;
 }
 
 .buttons {
