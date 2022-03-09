@@ -131,6 +131,7 @@ button:hover {
 .modal button {
     margin-left: 0;
     margin-right: 0;
+    z-index: 9999;
 }
 
 .buttons {
@@ -147,6 +148,6 @@ button:hover {
     align-items: center;
 }
 
-.tries-box{
+.tries-box {
     margin-bottom: 20px;
 }
