@@ -5,6 +5,7 @@ import RICIBs from 'react-individual-character-input-boxes';
 
 export default function Game() {
     const QUANTITY_OF_LIFES = 8;
+    const IS_MOBILE = window.innerWidth < 768;
 
     const [word, setWord] = React.useState(localStorage.getItem('word') || '')
     const [update, setUpdate] = React.useState(true)
@@ -114,18 +115,27 @@ export default function Game() {
                 <header className='container'>
                     <div>{`Tentativas restantes: ${lifes}`}</div>
                 </header>
-                <div>
+                <div style={
+                    {
+                        position: IS_MOBILE ? 'absolute' : 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        bottom: IS_MOBILE ? '20px' : '',
+                    }}>
                     <div className='words'>
-                        {renderTriesInBoxes()}
+                        <div className='tries-box'>{renderTriesInBoxes()}</div>
                         <RICIBs
                             amount={word.length}
                             autofocus={true}
                             handleOutputString={e => { handleWord(e) }}
                             inputRegExp={/^[a-zA-Z0-9]$/}
+                            inputString={tryWord}
                         />
                     </div>
+                    <button onClick={() => { testWord() }}>Testar</button>
                 </div>
-                <button onClick={() => { testWord() }}>Testar</button>
             </div>
         )
     }
