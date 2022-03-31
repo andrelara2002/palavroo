@@ -1,7 +1,9 @@
 import React from 'react'
 
 import { getRandomWithSize } from '../services/palavroo_api'
+
 import RICIBs from 'react-individual-character-input-boxes';
+import Modal from '../components/modal';
 
 export default function Game() {
     const QUANTITY_OF_LIFES = 8;
@@ -15,8 +17,21 @@ export default function Game() {
     const [tries, setTries] = React.useState(JSON.parse(localStorage.getItem('tries')) || [])
     const [lifes, setLifes] = React.useState(JSON.parse(localStorage.getItem('lifes')) || QUANTITY_OF_LIFES)
     const [success, setSuccess] = React.useState(false)
+    const [failure, setFailure] = React.useState(false)
+    const [difficult, setDifficult] = React.useState(1)
 
     const getData = async () => {
+        let size
+        switch (difficult) {
+            case 1:
+                size = 5
+                break;
+            case 2:
+                size = 6
+                break;
+            default:
+                break;
+        }
         const response = await getRandomWithSize(5)
         const _word = replaceAccents(response.data)
 
@@ -58,9 +73,8 @@ export default function Game() {
             //Case word is incorrect
             else {
                 setTries([...tries, tryWord])
-                setTryWord('');
-                decreaseLifes();
                 localStorage.setItem('tries', JSON.stringify([...tries, tryWord]))
+                tries.length >= QUANTITY_OF_LIFES ? setFailure(true) : decreaseLifes();
             }
         }
     }
@@ -76,6 +90,7 @@ export default function Game() {
         setTries([]);
         setLifes(QUANTITY_OF_LIFES)
         setSuccess(false)
+        setFailure(false)
         localStorage.removeItem('word')
         localStorage.removeItem('tries')
         getData()
@@ -101,19 +116,38 @@ export default function Game() {
     }
 
     if (loading) {
-        return <h1>Loading...</h1>
+        return <h1 style={{ color: '#ffffff' }}>Loading...</h1>
     }
 
     else {
         return (
             <div className='container'>
-                <div className='modal' hidden={!success}>
-                    <h1>Parabéns!</h1>
-                    <h2>Você acertou a palavra {originalWord}</h2>
-                    <button onClick={forceUpdate}>Jogar novamente</button>
-                </div>
+                <Modal
+                    title={'Parabéns'}
+                    hidden={!success}
+                    description={`Você acertou a palavra ${originalWord}`}
+                    buttonLabel={"Jogar novamente"}
+                    onClick={() => { forceUpdate() }}
+                />
+                <Modal
+                    title={"Acabaram suas vidas!"}
+                    description={`A palavra era: ${originalWord}`}
+                    buttonLabel={"Jogar novamente"}
+                    hidden={!failure}
+                    onClick={() => { forceUpdate() }}
+                />
                 <header className='container'>
-                    <div>{`Tentativas restantes: ${lifes}`}</div>
+                    <strong>{`Tentativas restantes: ${lifes}`}</strong>
+                    <select name="Dificuldade" onChange={(e) => setDifficult(e.target.value)}>
+                        <option value={1}>Fácil (4,5 letras)</option>
+                        <option value={2}>Médio (6,7 letras)</option>
+                        <option value={3}>Difícil (8,9 letras)</option>
+                        <option value={4}>Insano (10,12 letras)</option>
+                    </select>
+                    <button
+                        className='button restricted-content'
+                        onClick={() => { forceUpdate() }}
+                        type={'button'}>Mudar palavra</button>
                 </header>
                 <div style={
                     {
@@ -131,7 +165,7 @@ export default function Game() {
                             autofocus={true}
                             handleOutputString={e => { handleWord(e) }}
                             inputRegExp={/^[a-zA-Z0-9]$/}
-                            inputString={tryWord}
+                            inputString={''}
                         />
                     </div>
                     <button onClick={() => { testWord() }}>Testar</button>
