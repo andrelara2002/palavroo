@@ -2,6 +2,7 @@
     --border-color: rgb(104, 104, 104);
     --letter-color: rgb(235, 235, 235);
     --card-color: rgb(31, 30, 30);
+    --accent-color: rgb(76, 24, 196);
 }
 
 * {
@@ -161,4 +162,19 @@ button:hover {
 
 .selector {
     width: fit-content;
+}
+
+
+select{
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+select:focus-within{
+    border: none;
+}
+
+select:hover{
+    border: 1px solid var(--accent-color);
 }

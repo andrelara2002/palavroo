@@ -22,17 +22,24 @@ export default function Game() {
 
     const getData = async () => {
         let size
-        switch (difficult) {
+        switch (parseInt(difficult)) {
             case 1:
                 size = 5
                 break;
             case 2:
                 size = 6
                 break;
+            case 3:
+                size = 8
+                break;
+            case 4:
+                size = 10;
+                break;
             default:
                 break;
         }
-        const response = await getRandomWithSize(5)
+
+        const response = await getRandomWithSize(size)
         const _word = replaceAccents(response.data)
 
         setOriginalWord(response.data)
@@ -122,14 +129,14 @@ export default function Game() {
     else {
         return (
             <div className='container'>
-                <Modal
+                <Modal // Modal for success
                     title={'Parabéns'}
                     hidden={!success}
                     description={`Você acertou a palavra ${originalWord}`}
                     buttonLabel={"Jogar novamente"}
                     onClick={() => { forceUpdate() }}
                 />
-                <Modal
+                <Modal // Modal for failure
                     title={"Acabaram suas vidas!"}
                     description={`A palavra era: ${originalWord}`}
                     buttonLabel={"Jogar novamente"}
@@ -138,7 +145,7 @@ export default function Game() {
                 />
                 <header className='container'>
                     <strong>{`Tentativas restantes: ${lifes}`}</strong>
-                    <select name="Dificuldade" onChange={(e) => setDifficult(e.target.value)}>
+                    <select name="Dificuldade" value={difficult} onChange={(e) => setDifficult(e.target.value)}>
                         <option value={1}>Fácil (4,5 letras)</option>
                         <option value={2}>Médio (6,7 letras)</option>
                         <option value={3}>Difícil (8,9 letras)</option>
