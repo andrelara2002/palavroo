@@ -10,7 +10,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-html {
+html, body {
     background-color: rgb(37, 37, 37);
     display: flex;
     justify-content: center;
@@ -54,21 +54,22 @@ input:focus-within {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow-y: visible;
 }
 
 button {
     border-radius: 11px;
     padding: 10px;
     margin: 5px;
-    text-transform: capitalize;
+    text-transform: uppercase;
     background-color: rgb(76, 24, 196);
     padding: 10px 50px 10px 50px;
     font-weight: bold;
     color: var(--letter-color);
     width: 100%;
     border: none;
-    height: 4rem;
-    font-size: 1.2rem;
+    height: 3rem;
+    font-size: 0.8rem;
 }
 
 button:hover {
@@ -82,22 +83,22 @@ button:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     font-size: 2.5rem;
     text-transform: uppercase;
     text-align: center;
     gap: 10px;
-    margin-top: 10px;
+    margin-bottom: 1.6rem;
+
 }
 
 .letter {
     border: 1px solid var(--border-color);
-    width: 3rem;
-    height: 3rem;
-    padding: 0;
+    width: 2rem;
+    height: 2rem;
     line-height: 2.5rem;
     border-radius: .3rem;
     color: var(--letter-color);
+    font-size: 1rem;
 }
 
 .correct {
@@ -141,11 +142,11 @@ button:hover {
     margin-right: 0;
 }
 
-.restricted-8{
+.restricted-8 {
     width: 8rem;
 }
 
-.restricted-content{
+.restricted-content {
     width: fit-content;
 }
 
@@ -165,16 +166,51 @@ button:hover {
 }
 
 
-select{
+select {
     padding: 10px;
     border-radius: 5px;
     border: none;
 }
 
-select:focus-within{
+select:focus-within {
     border: none;
 }
 
-select:hover{
+select:hover {
     border: 1px solid var(--accent-color);
+}
+
+.count {
+    font-size: 1rem;
+    padding: 0;
+    margin: 0;
+}
+.app{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%
+}
+
+.wrapper{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+    body{
+        width: 100vw;
+        height: 100vh;
+    }
+    header{
+        flex-direction: column;
+    }
+
+    header .container{
+        justify-content: flex-start;
+    }
 }
