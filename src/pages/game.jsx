@@ -2,12 +2,17 @@ import React from 'react'
 
 import { getRandomWithSize } from '../services/palavroo_api'
 
+import { modular, randomNumber, count } from '../utils/math';
+
 import RICIBs from 'react-individual-character-input-boxes';
 import Modal from '../components/modal';
 
 export default function Game() {
+
+    //REACT FUNCTIONS SETUP
+
     const QUANTITY_OF_LIFES = 8;
-    const IS_MOBILE = window.innerWidth < 768;
+    const IS_MOBILE = window.innerWidth < 600;
 
     const [word, setWord] = React.useState(localStorage.getItem('word') || '')
     const [update, setUpdate] = React.useState(true)
@@ -19,6 +24,12 @@ export default function Game() {
     const [success, setSuccess] = React.useState(false)
     const [failure, setFailure] = React.useState(false)
     const [difficult, setDifficult] = React.useState(1)
+
+    React.useEffect(() => {
+        word ? setLoading(false) : getData()
+    }, [update])
+
+    //SETTINGS AND DATA TRANSACTION FUNCTIONS
 
     const getData = async () => {
         let size
@@ -43,33 +54,15 @@ export default function Game() {
         const _word = replaceAccents(response.data)
 
         setOriginalWord(response.data)
-        setWord(_word)
+        setWord(_word.toLowerCase())
 
         localStorage.setItem('word', _word)
         setLoading(false)
     }
 
-    React.useEffect(() => {
-        word ? setLoading(false) : getData()
-    }, [update])
-
-    const handleWord = (e) => {
-        setTryWord(e.toLocaleLowerCase())
-    }
-
-    const replaceAccents = (str) => {
-        const accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž'
-        const accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz"
-        const strAccents = str.split('')
-        const strAccentsOut = strAccents.map((letter) => {
-            const accentIndex = accents.indexOf(letter)
-            return accentIndex !== -1 ? accentsOut[accentIndex] : letter
-        })
-        return strAccentsOut.join('')
-    }
+    //GAMEPLAY LOGIC
 
     const testWord = () => {
-        console.log(`Word: ${word} tryWord: ${tryWord}`)
         //Check if word is fully completed
         if (tryWord[0] !== '' && tryWord[0] !== undefined) {
             // Case word is correct
@@ -91,6 +84,24 @@ export default function Game() {
         localStorage.setItem('lifes', lifes - 1)
     }
 
+    //LOGIC AND INTERNAL TRANSACTIONS
+
+    const handleWord = (e) => {
+        setTryWord(e.toLocaleLowerCase())
+    }
+
+    const replaceAccents = (str) => {
+        const accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž'
+        const accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz"
+        const strAccents = str.split('')
+        const strAccentsOut = strAccents.map((letter) => {
+            const accentIndex = accents.indexOf(letter)
+            return accentIndex !== -1 ? accentsOut[accentIndex] : letter
+        })
+        return strAccentsOut.join('')
+    }
+
+
     const forceUpdate = () => {
         setLoading(true)
         setTryWord('');
@@ -103,6 +114,8 @@ export default function Game() {
         getData()
     }
 
+    //LAYOUT AND SCREEN CONSTRUCTION
+
     const renderTriesInBoxes = () => {
         return tries.map((item, index) => {
             const _word = item.split('')
@@ -113,12 +126,31 @@ export default function Game() {
     }
 
     const renderLetters = (_word) => {
+        const letterCount = count(_word.join().replaceAll(",", ''));
+        let wordLetterCount = count(word)
+        const totalLetterCount = count(word)
+
         return _word.map((letter, index) => {
+
+            let _class = 'letter ';
+
+            if (letter === word[index]) {
+                _class += 'correct'
+            }
+            else if (word.includes(letter)) {
+                wordLetterCount[letter] > 0 ? _class += 'close' : _class += 'normal'
+                wordLetterCount = {
+                    ...wordLetterCount,
+                    [letter]: modular(wordLetterCount[letter]) - 1
+                }
+            }
+            else _class += 'normal'
+
             return <span
                 key={index}
-                className={
-                    `letter ${letter === word[index] ? 'correct' : word.includes(letter) ? 'close' : 'normal'}`
-                }>{letter}</span>
+                className={_class}>{letter}
+                <p className='count'>{totalLetterCount[letter] || 0}</p>
+            </span>
         })
     }
 
@@ -128,7 +160,7 @@ export default function Game() {
 
     else {
         return (
-            <div className='container'>
+            <div className='app'>
                 <Modal // Modal for success
                     title={'Parabéns'}
                     hidden={!success}
@@ -156,15 +188,7 @@ export default function Game() {
                         onClick={() => { forceUpdate() }}
                         type={'button'}>Mudar palavra</button>
                 </header>
-                <div style={
-                    {
-                        position: IS_MOBILE ? 'absolute' : 'relative',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        bottom: IS_MOBILE ? '20px' : '',
-                    }}>
+                <div className='wrapper'>
                     <div className='words'>
                         <div className='tries-box'>{renderTriesInBoxes()}</div>
                         <RICIBs
@@ -173,9 +197,10 @@ export default function Game() {
                             handleOutputString={e => { handleWord(e) }}
                             inputRegExp={/^[a-zA-Z0-9]$/}
                             inputString={''}
+                            inputProps={Array(word.length).fill({ style: { width: '1rem' , height: "1rem", position: 'relative'} })}
                         />
-                    </div>
-                    <button onClick={() => { testWord() }}>Testar</button>
+                    </div>  
+                    <button onClick={() => { testWord() }}>Jogar</button>
                 </div>
             </div>
         )
