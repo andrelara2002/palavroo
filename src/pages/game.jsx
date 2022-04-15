@@ -197,7 +197,7 @@ export default function Game() {
                             handleOutputString={e => { handleWord(e) }}
                             inputRegExp={/^[a-zA-Z0-9]$/}
                             inputString={''}
-                            inputProps={Array(word.length).fill({ style: { width: '1.5rem' , height: "1.5rem", position: 'relative'} })}
+                            inputProps={Array(word.length).fill({ style: { width: '1.8rem' , height: "1.8rem", position: 'relative'} })}
                         />
                     </div>  
                     <button onClick={() => { testWord() }}>Jogar</button>
