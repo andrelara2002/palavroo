@@ -65,10 +65,11 @@ export default function Game() {
     //GAMEPLAY LOGIC
 
     const testWord = () => {
+        console.log(`TRY WORD:${tryWord} WORD: ${word}`)
         //Check if word is fully completed
         if (tryWord[0] !== '' && tryWord[0] !== undefined) {
             // Case word is correct
-            if (word.match(tryWord.toLocaleLowerCase())) {
+            if (word === tryWord.toLocaleLowerCase()) {
                 setTries([...tries, tryWord])
                 setSuccess(true)
             }
