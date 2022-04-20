@@ -28,6 +28,7 @@ export default function Game() {
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
+        console.log("Loading...")
     }, [update])
 
     //SETTINGS AND DATA TRANSACTION FUNCTIONS
