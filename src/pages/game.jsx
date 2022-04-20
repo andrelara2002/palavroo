@@ -3,13 +3,14 @@ import React from 'react'
 import { getRandomWithSize } from '../services/palavroo_api'
 
 import { modular, randomNumber, count } from '../utils/math';
+import { Audio } from 'react-loader-spinner';
 
 import RICIBs from 'react-individual-character-input-boxes';
 import Modal from '../components/modal';
 
 export default function Game() {
 
-    //REACT FUNCTIONS SETUP
+    //REACT FUNCTIONS SETUP 
 
     const QUANTITY_OF_LIFES = 8;
     const IS_MOBILE = window.innerWidth < 600;
@@ -35,22 +36,22 @@ export default function Game() {
         let size
         switch (parseInt(difficult)) {
             case 1:
-                size = 5
+                size = randomNumber(4, 5)
                 break;
             case 2:
-                size = 6
+                size = randomNumber(6, 7)
                 break;
             case 3:
-                size = 8
+                size = randomNumber(8, 9)
                 break;
             case 4:
-                size = 10;
+                size = randomNumber(10, 14)
                 break;
             default:
                 break;
         }
 
-        const response = await getRandomWithSize(size)
+        const response = await getRandomWithSize(Math.round(size))
         const _word = replaceAccents(response.data)
 
         setOriginalWord(response.data)
@@ -87,6 +88,7 @@ export default function Game() {
     //LOGIC AND INTERNAL TRANSACTIONS
 
     const handleWord = (e) => {
+        console.log(e)
         setTryWord(e.toLocaleLowerCase())
     }
 
@@ -149,13 +151,17 @@ export default function Game() {
             return <span
                 key={index}
                 className={_class}>{letter}
-                <p className='count'>{totalLetterCount[letter] || 0}</p>
             </span>
         })
     }
 
     if (loading) {
-        return <h1 style={{ color: '#ffffff' }}>Loading...</h1>
+        return <Audio
+            height="100"
+            width="100"
+            color='grey'
+            ariaLabel='loading'
+        />
     }
 
     else {
@@ -177,16 +183,18 @@ export default function Game() {
                 />
                 <header className='container'>
                     <strong>{`Tentativas restantes: ${lifes}`}</strong>
-                    <select name="Dificuldade" value={difficult} onChange={(e) => setDifficult(e.target.value)}>
-                        <option value={1}>Fácil (4,5 letras)</option>
-                        <option value={2}>Médio (6,7 letras)</option>
-                        <option value={3}>Difícil (8,9 letras)</option>
-                        <option value={4}>Insano (10,12 letras)</option>
-                    </select>
-                    <button
-                        className='button restricted-content'
-                        onClick={() => { forceUpdate() }}
-                        type={'button'}>Mudar palavra</button>
+                    <div className="header_buttons">
+                        <select name="Dificuldade" value={difficult} onChange={(e) => setDifficult(e.target.value)}>
+                            <option value={1}>Fácil (4,5 letras)</option>
+                            <option value={2}>Médio (6,7 letras)</option>
+                            <option value={3}>Difícil (8,9 letras)</option>
+                            <option value={4}>Insano (10,12 letras)</option>
+                        </select>
+                        <button
+                            className='button restricted-content'
+                            onClick={() => { forceUpdate() }}
+                            type={'button'}>Mudar palavra</button>
+                    </div>
                 </header>
                 <div className='wrapper'>
                     <div className='words'>
@@ -197,9 +205,12 @@ export default function Game() {
                             handleOutputString={e => { handleWord(e) }}
                             inputRegExp={/^[a-zA-Z0-9]$/}
                             inputString={''}
-                            inputProps={Array(word.length).fill({ style: { width: '1rem' , height: "1rem", position: 'relative'} })}
+                            inputProps={Array(word.length).fill({
+                                style:
+                                    { width: '1rem', height: "1rem", position: 'relative', fontSize: '1rem' }
+                            })}
                         />
-                    </div>  
+                    </div>
                     <button onClick={() => { testWord() }}>Jogar</button>
                 </div>
             </div>
