@@ -1,4 +1,5 @@
 import React from 'react'
+import reactDom from 'react-dom';
 
 import { getRandomWithSize } from '../services/palavroo_api'
 
@@ -13,7 +14,6 @@ export default function Game() {
     //REACT FUNCTIONS SETUP 
 
     const QUANTITY_OF_LIFES = 8;
-    const IS_MOBILE = window.innerWidth < 600;
 
     const [word, setWord] = React.useState(localStorage.getItem('word') || '')
     const [update, setUpdate] = React.useState(true)
@@ -28,8 +28,14 @@ export default function Game() {
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
-        console.log("Loading...")
     }, [update])
+
+    document.getElementById('root').onkeydown = (e) => {
+        if (e.keyCode === 13) {
+            console.log(e.keyCode)
+            testWord()
+        }
+    }
 
     //SETTINGS AND DATA TRANSACTION FUNCTIONS
 
@@ -55,6 +61,11 @@ export default function Game() {
         const response = await getRandomWithSize(Math.round(size))
         const _word = replaceAccents(response.data)
 
+        let _tries = ''
+        for (let i = 0; i < word.length; i++) { _tries += " " }
+
+        setTries(Array(QUANTITY_OF_LIFES).fill(_tries))
+
         setOriginalWord(response.data)
         setWord(_word.toLowerCase())
 
@@ -66,18 +77,22 @@ export default function Game() {
 
     const testWord = () => {
         console.log(`TRY WORD:${tryWord} WORD: ${word}`)
+        const _triedWord = tries
+
+        _triedWord[QUANTITY_OF_LIFES - lifes] = tryWord
+
         //Check if word is fully completed
         if (tryWord[0] !== '' && tryWord[0] !== undefined) {
             // Case word is correct
             if (word === tryWord.toLocaleLowerCase()) {
-                setTries([...tries, tryWord])
+                setTries(_triedWord) //setTries([...tries, tryWord])
                 setSuccess(true)
             }
             //Case word is incorrect
             else {
-                setTries([...tries, tryWord])
+                setTries(_triedWord) // setTries([...tries, tryWord])
                 localStorage.setItem('tries', JSON.stringify([...tries, tryWord]))
-                tries.length >= QUANTITY_OF_LIFES ? setFailure(true) : decreaseLifes();
+                lifes === 0 ? setFailure(true) : decreaseLifes();
             }
         }
     }
@@ -90,7 +105,6 @@ export default function Game() {
     //LOGIC AND INTERNAL TRANSACTIONS
 
     const handleWord = (e) => {
-        console.log(e)
         setTryWord(e.toLocaleLowerCase())
     }
 
@@ -157,6 +171,18 @@ export default function Game() {
         })
     }
 
+    const renderDictionary = () => {
+        const dictionaryLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        return dictionaryLetters.map((letter, index) => {
+            let _class = 'letter '
+            if (word.toLowerCase().includes(letter)) {
+                _class += 'correct'
+            }
+            else _class += 'normal'
+            return <span key={index} className={_class}>{letter}</span>
+        })
+    }
+
     if (loading) {
         return <Audio
             height="100"
@@ -201,6 +227,7 @@ export default function Game() {
                 <div className='wrapper'>
                     <div className='words'>
                         <div className='tries-box'>{renderTriesInBoxes()}</div>
+                        <div className='dictionary'>{renderDictionary()}</div>
                         <RICIBs
                             amount={word.length}
                             autofocus={true}
@@ -209,7 +236,10 @@ export default function Game() {
                             inputString={''}
                             inputProps={Array(word.length).fill({
                                 style:
-                                    { width: '1rem', height: "1rem", position: 'relative', fontSize: '1rem' }
+                                {
+                                    width: '1rem', height: "1rem", position: 'relative', fontSize: '1rem',
+                                    color: 'rgb(235, 235, 235)', backgroundColor: '#1d1d1d'
+                                }
                             })}
                         />
                     </div>
