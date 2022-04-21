@@ -25,10 +25,13 @@ export default function Game() {
     const [success, setSuccess] = React.useState(false)
     const [failure, setFailure] = React.useState(false)
     const [difficult, setDifficult] = React.useState(1)
+    const [closeLetters, setCloseLetters] = React.useState([])
+    const [correctLetters, setCorrectLetters] = React.useState([])
+    const [lettersCounter, setLettersCounter] = React.useState([])
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
-    }, [update])
+    }, [update, word])
 
     document.getElementById('root').onkeydown = (e) => {
         if (e.keyCode === 13) {
@@ -124,6 +127,8 @@ export default function Game() {
         setLoading(true)
         setTryWord('');
         setTries([]);
+        setCloseLetters([]);
+        setCorrectLetters([]);
         setLifes(QUANTITY_OF_LIFES)
         setSuccess(false)
         setFailure(false)
@@ -154,9 +159,20 @@ export default function Game() {
 
             if (letter === word[index]) {
                 _class += 'correct'
+                if (!correctLetters.includes(letter)) {
+                    setCorrectLetters([...correctLetters, letter])
+                }
             }
             else if (word.includes(letter)) {
-                wordLetterCount[letter] > 0 ? _class += 'close' : _class += 'normal'
+                if (wordLetterCount[letter] > 0) {
+                    _class += 'close'
+                    if (!closeLetters.includes(letter)) {
+                        setCloseLetters([...closeLetters, letter])
+                    }
+                }
+                else {
+                    _class += 'normal'
+                }
                 wordLetterCount = {
                     ...wordLetterCount,
                     [letter]: modular(wordLetterCount[letter]) - 1
@@ -175,8 +191,11 @@ export default function Game() {
         const dictionaryLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         return dictionaryLetters.map((letter, index) => {
             let _class = 'letter '
-            if (word.toLowerCase().includes(letter)) {
+            if (correctLetters.includes(letter.toLowerCase())) {
                 _class += 'correct'
+            }
+            else if (closeLetters.includes(letter.toLowerCase())) {
+                _class += 'close'
             }
             else _class += 'normal'
             return <span key={index} className={_class}>{letter}</span>
@@ -243,7 +262,7 @@ export default function Game() {
                             })}
                         />
                     </div>
-                    <button onClick={() => { testWord() }}>Jogar</button>
+                    <button style={{ width: `${2.95 * word.length}rem` }} onClick={() => { testWord() }}>Jogar</button>
                 </div>
             </div>
         )
