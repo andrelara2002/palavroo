@@ -237,6 +237,11 @@ select:hover {
     align-items: center;
 }
 
+.incorrect{
+    background: rgb(36, 36, 36);
+    color: var(--letter-color);
+}
+
 @media only screen and (max-width: 600px) {
     body {
         width: 100vw;

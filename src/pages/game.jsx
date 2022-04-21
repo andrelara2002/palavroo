@@ -28,7 +28,7 @@ export default function Game() {
     const [difficult, setDifficult] = React.useState(1)
     const [closeLetters, setCloseLetters] = React.useState([])
     const [correctLetters, setCorrectLetters] = React.useState([])
-    const [meaning, setMeaning] = React.useState('')
+    const [incorrectWords, setIncorrectWords] = React.useState([])
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
@@ -180,7 +180,12 @@ export default function Game() {
                     [letter]: modular(wordLetterCount[letter]) - 1
                 }
             }
-            else _class += 'normal'
+            else {
+                _class += 'normal'
+                if (!incorrectWords.includes(letter)) {
+                    setIncorrectWords([...incorrectWords, letter])
+                }
+            }
 
             return <span
                 key={index}
@@ -198,6 +203,9 @@ export default function Game() {
             }
             else if (closeLetters.includes(letter.toLowerCase())) {
                 _class += 'close'
+            }
+            else if (incorrectWords.includes(letter.toLowerCase())) {
+                _class += 'incorrect'
             }
             else _class += 'normal'
             return <span key={index} className={_class}>{letter}</span>
