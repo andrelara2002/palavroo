@@ -2,6 +2,7 @@ import React from 'react'
 import reactDom from 'react-dom';
 
 import { getRandomWithSize } from '../services/palavroo_api'
+import { getWordMeaning } from '../services/dicionario_api';
 
 import { modular, randomNumber, count } from '../utils/math';
 import { Audio } from 'react-loader-spinner';
@@ -27,7 +28,7 @@ export default function Game() {
     const [difficult, setDifficult] = React.useState(1)
     const [closeLetters, setCloseLetters] = React.useState([])
     const [correctLetters, setCorrectLetters] = React.useState([])
-    const [lettersCounter, setLettersCounter] = React.useState([])
+    const [meaning, setMeaning] = React.useState('')
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
@@ -62,6 +63,7 @@ export default function Game() {
         }
 
         const response = await getRandomWithSize(Math.round(size))
+
         const _word = replaceAccents(response.data)
 
         let _tries = ''
