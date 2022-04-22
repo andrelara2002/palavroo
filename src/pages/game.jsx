@@ -131,6 +131,7 @@ export default function Game() {
         setTries([]);
         setCloseLetters([]);
         setCorrectLetters([]);
+        setIncorrectWords([]);
         setLifes(QUANTITY_OF_LIFES)
         setSuccess(false)
         setFailure(false)
