@@ -29,9 +29,30 @@ export default function Game() {
     const [closeLetters, setCloseLetters] = React.useState([])
     const [correctLetters, setCorrectLetters] = React.useState([])
     const [incorrectWords, setIncorrectWords] = React.useState([])
+    const [state, setState] = React.useState({
+        word: '',
+        tries: [],
+        lifes: QUANTITY_OF_LIFES,
+        success: false,
+        failure: false,
+        difficult: 1,
+        closeLetters: [],
+        correctLetters: [],
+        incorrectWords: [],
+        update: true,
+        loading: true,
+        tryWord: '',
+        originalWord: ''
+    })
 
     React.useEffect(() => {
         word ? setLoading(false) : getData()
+
+        let _tries = ''
+        for (let i = 0; i < word.length; i++) { _tries += " " }
+
+        setTries(Array(QUANTITY_OF_LIFES).fill(_tries))
+
     }, [update, word])
 
     document.getElementById('root').onkeydown = (e) => {
@@ -66,10 +87,10 @@ export default function Game() {
 
         const _word = replaceAccents(response.data)
 
-        let _tries = ''
+        /* let _tries = ''
         for (let i = 0; i < word.length; i++) { _tries += " " }
 
-        setTries(Array(QUANTITY_OF_LIFES).fill(_tries))
+        setTries(Array(QUANTITY_OF_LIFES).fill(_tries)) */
 
         setOriginalWord(response.data)
         setWord(_word.toLowerCase())
