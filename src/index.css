@@ -123,7 +123,7 @@ button:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
     align-items: center;
-    width: 400px;
+    width: 350px;
     gap:2px;
     margin: 0px 0 20px 0;
 }
@@ -181,6 +181,7 @@ button:hover {
 }
 
 .tries-box {
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 

@@ -118,7 +118,7 @@ export default function Game() {
             else {
                 setTries(_triedWord) // setTries([...tries, tryWord])
                 localStorage.setItem('tries', JSON.stringify([...tries, tryWord]))
-                lifes === 0 ? setFailure(true) : decreaseLifes();
+                if (lifes - 1 === 0) { setFailure(true) } else decreaseLifes();
             }
         }
     }
@@ -217,7 +217,12 @@ export default function Game() {
     }
 
     const renderDictionary = () => {
-        const dictionaryLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        const dictionaryLetters = [
+            //Qwerty letters
+            'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+            'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+            'Z', 'X', 'C', 'V', 'B', 'N', 'M',
+        ]
         return dictionaryLetters.map((letter, index) => {
             let _class = 'letter '
             if (correctLetters.includes(letter.toLowerCase())) {
@@ -261,7 +266,7 @@ export default function Game() {
                     onClick={() => { forceUpdate() }}
                 />
                 <header className='container'>
-                    <strong>{`Tentativas restantes: ${lifes}`}</strong>
+                    <strong>{`Tentativas restantes: ${lifes-1}`}</strong>
                     <div className="header_buttons">
                         <select name="Dificuldade" value={difficult} onChange={(e) => setDifficult(e.target.value)}>
                             <option value={1}>Fácil (4,5 letras)</option>
@@ -277,8 +282,6 @@ export default function Game() {
                 </header>
                 <div className='wrapper'>
                     <div className='words'>
-                        <div className='tries-box'>{renderTriesInBoxes()}</div>
-                        <div className='dictionary'>{renderDictionary()}</div>
                         <RICIBs
                             amount={word.length}
                             autofocus={true}
@@ -293,6 +296,8 @@ export default function Game() {
                                 }
                             })}
                         />
+                        <div className='tries-box'>{renderTriesInBoxes()}</div>
+                        <div className='dictionary'>{renderDictionary()}</div>
                     </div>
                     <button style={{ width: `${2.95 * word.length}rem` }} onClick={() => { testWord() }}>Jogar</button>
                 </div>
