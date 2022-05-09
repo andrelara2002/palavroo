@@ -180,6 +180,7 @@ export default function Game() {
                     title={"Acabaram suas vidas!"}
                     description={`A palavra era: ${originalWord}`}
                     buttonLabel={"Jogar novamente"}
+                    className={'failed'} 
                     hidden={!failure}
                     onClick={() => { forceUpdate() }}
                 />
