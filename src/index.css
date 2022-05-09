@@ -95,7 +95,7 @@ button:hover {
 }
 
 .letter {
-    border: 1px solid var(--border-color);
+    border: none/* 1px solid var(--border-color) */;
     width: 2rem;
     height: 2rem;
     line-height: 0%;
@@ -104,16 +104,28 @@ button:hover {
     font-size: 1rem;
     display: flex;
     justify-content: center;
+    font-weight: bold;
     align-items: center;
     background: var(--card-color);
 }
 
 .correct {
-    border-color: aquamarine;
+    background: aquamarine;
+    color: var(--card-color);
 }
 
 .close {
-    border-color: yellow
+    background: yellow;
+    color: var(--card-color);
+}
+
+.dictionary{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
+    align-items: center;
+    width: 350px;
+    gap:2px;
+    margin: 0px 0 20px 0;
 }
 
 .modal {
@@ -173,6 +185,7 @@ button:hover {
 }
 
 .tries-box {
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -228,6 +241,11 @@ select:hover {
     padding: 10px;
     justify-content: center;
     align-items: center;
+}
+
+.incorrect{
+    background: rgb(36, 36, 36);
+    color: var(--letter-color);
 }
 
 @media only screen and (max-width: 600px) {
