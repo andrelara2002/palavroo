@@ -1,4 +1,4 @@
-export default function renderDictionary(characters = []) {
+export default function Dictionary(characters = []) {
     const dictionaryLetters = [
         //Qwerty letters
         'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',

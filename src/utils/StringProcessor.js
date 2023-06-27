@@ -66,4 +66,8 @@ export default class StringProcessor {
         })
     }
 
+    getLength() {
+        return this.schema.base_word.length
+    }
+
 }
