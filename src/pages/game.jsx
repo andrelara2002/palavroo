@@ -1,5 +1,6 @@
 import React from 'react'
-import reactDom from 'react-dom';
+
+import replaceAccents from '../utils/StringFunctions';
 
 import { getRandomWithSize } from '../services/palavroo_api'
 import { getWordMeaning } from '../services/dicionario_api';
@@ -8,7 +9,8 @@ import { modular, randomNumber, count } from '../utils/math';
 import { Audio } from 'react-loader-spinner';
 
 import RICIBs from 'react-individual-character-input-boxes';
-import Modal from '../components/modal';
+import Modal from '../components/Modal/modal';
+import defineDifficult from '../utils/Difficult';
 
 export default function Game() {
 
@@ -65,32 +67,10 @@ export default function Game() {
     //SETTINGS AND DATA TRANSACTION FUNCTIONS
 
     const getData = async () => {
-        let size
-        switch (parseInt(difficult)) {
-            case 1:
-                size = randomNumber(4, 5)
-                break;
-            case 2:
-                size = randomNumber(6, 7)
-                break;
-            case 3:
-                size = randomNumber(8, 9)
-                break;
-            case 4:
-                size = randomNumber(10, 14)
-                break;
-            default:
-                break;
-        }
 
-        const response = await getRandomWithSize(Math.round(size))
+        const response = await getRandomWithSize(defineDifficult(difficult))
 
         const _word = replaceAccents(response.data)
-
-        /* let _tries = ''
-        for (let i = 0; i < word.length; i++) { _tries += " " }
-
-        setTries(Array(QUANTITY_OF_LIFES).fill(_tries)) */
 
         setOriginalWord(response.data)
         setWord(_word.toLowerCase())
@@ -132,17 +112,6 @@ export default function Game() {
 
     const handleWord = (e) => {
         setTryWord(e.toLocaleLowerCase())
-    }
-
-    const replaceAccents = (str) => {
-        const accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž'
-        const accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz"
-        const strAccents = str.split('')
-        const strAccentsOut = strAccents.map((letter) => {
-            const accentIndex = accents.indexOf(letter)
-            return accentIndex !== -1 ? accentsOut[accentIndex] : letter
-        })
-        return strAccentsOut.join('')
     }
 
 
@@ -216,29 +185,6 @@ export default function Game() {
         })
     }
 
-    const renderDictionary = () => {
-        const dictionaryLetters = [
-            //Qwerty letters
-            'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
-            'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
-            'Z', 'X', 'C', 'V', 'B', 'N', 'M',
-        ]
-        return dictionaryLetters.map((letter, index) => {
-            let _class = 'letter '
-            if (correctLetters.includes(letter.toLowerCase())) {
-                _class += 'correct'
-            }
-            else if (closeLetters.includes(letter.toLowerCase())) {
-                _class += 'close'
-            }
-            else if (incorrectWords.includes(letter.toLowerCase())) {
-                _class += 'incorrect'
-            }
-            else _class += 'normal'
-            return <span key={index} className={_class}>{letter}</span>
-        })
-    }
-
     if (loading) {
         return <Audio
             height="100"
@@ -262,12 +208,12 @@ export default function Game() {
                     title={"Acabaram suas vidas!"}
                     description={`A palavra era: ${originalWord}`}
                     buttonLabel={"Jogar novamente"}
-                    className={'failed'} 
+                    className={'failed'}
                     hidden={!failure}
                     onClick={() => { forceUpdate() }}
                 />
                 <header className='container'>
-                    <strong>{`Tentativas restantes: ${lifes-1}`}</strong>
+                    <strong>{`Tentativas restantes: ${lifes - 1}`}</strong>
                     <div className="header_buttons">
                         <select name="Dificuldade" value={difficult} onChange={(e) => setDifficult(e.target.value)}>
                             <option value={1}>Fácil (4,5 letras)</option>
