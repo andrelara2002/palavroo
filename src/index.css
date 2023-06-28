@@ -26,7 +26,7 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 4rem;
+    height: 6rem;
     color: white;
     background-color: var(--card-color);
     font-size: 1.6rem;/* 
@@ -167,7 +167,6 @@ button:hover {
 
 .failed button{
     background-color: red;
-    color: var(--letter-color);
 }
 
 .restricted-8 {
@@ -231,7 +230,7 @@ select:hover {
     height: 80%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 }
 
