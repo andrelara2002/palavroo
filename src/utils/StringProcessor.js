@@ -50,6 +50,7 @@ export default class StringProcessor {
     }
 
 
+
     compare(word) {
         const word_characters = this.serialize(word)
 
@@ -66,10 +67,12 @@ export default class StringProcessor {
         })
     }
 
-    getLength() {
-        return this.schema.base_word.length
-    }
+    getLength() { return this.schema.base_word.length }
 
     getCharacters() { return this.schema }
+
+    setCharacter(index, letter, { times }) {
+        this.character[index] = new Character(letter, times || 0)
+    }
 
 }

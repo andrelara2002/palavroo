@@ -2,6 +2,8 @@ import React from "react";
 
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
+import './index.css'
+
 import Game from "./pages/Game/game";
 
 export default function App() {

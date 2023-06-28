@@ -4,8 +4,15 @@ import Letter from "../Letter/Letter";
 
 import './style.css'
 
-export default function Row({ characters, enabled }) {
+import { v4 as uuidv4 } from 'uuid';
 
-    console.log(characters)
-    return <div className="row">{characters.map((character, index) => Letter({ character, index, enabled: true }))}</div>
+export default function LetterRow({ characters, enabled }) {
+
+    return (
+        <div className="grid grid-flow-col auto-cols-max gap-2 mb-2">
+            {characters.map((character, c_index) =>
+                <Letter key={uuidv4()} character={character} enabled={enabled} />
+            )}
+        </div>
+    );
 }
