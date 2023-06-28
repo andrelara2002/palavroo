@@ -1,8 +1,10 @@
 import React from "react"
 
-export default function Letter({ enabled, character }) {
+import './style.css'
 
-    let type = enabled ? 'enabled' : 'disabled'
+export default function Letter({ enabled, character, index }) {
+
+    let type = 'letter '
 
     if (character?.dead) type += ' incorrect'
 
@@ -12,6 +14,10 @@ export default function Letter({ enabled, character }) {
 
     else type += ' normal'
 
-    return <span className={type}>{character?.letter}</span>
+    return <span
+        key={index}
+        className={type}>
+        {character.letter}
+    </span>
 
 }

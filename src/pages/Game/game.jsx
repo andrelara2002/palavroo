@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
 import { Audio } from 'react-loader-spinner'
-import StringProcessor from '../utils/StringProcessor'
-import Row from '../components/Row/Row'
-import Dictionary from '../components/Dictionary/Dictionary'
+import StringProcessor from '../../utils/StringProcessor'
+import Row from '../../components/Row/Row'
+import Dictionary from '../../components/Dictionary/Dictionary'
+
+import './style.css'
 
 
 
@@ -20,15 +22,28 @@ export default function Game() {
 
         const stringProcessor = new StringProcessor('banana')
 
-        const tries = new Array(state.tries)
+        stringProcessor.build()
 
-        tries.forEach(x => new Array(stringProcessor.getLength()))
+        const tries = Array.from({ length: state.lifes }, (_, index) => {
+
+            return Array.from({ length: 6 }, (_, index) => {
+                return {
+                    close: false,
+                    hit: false,
+                    letter: ' ',
+                    times: 0,
+                    dead: false
+                }
+            })
+        })
+
 
         setState({ ...state, word: stringProcessor, loading: false, tries })
 
+
     }, [])
 
-    if (loading)
+    if (state.loading)
         return (
             <Audio
                 height="100"
@@ -40,11 +55,11 @@ export default function Game() {
 
 
     else {
-        <>
-            <section>
+        return <main >
+            <section style={{ gap: 10, display: 'grid' }}>
                 {
-                    tries.map(word => {
-                        <Row
+                    state.tries.map(word => {
+                        return <Row
                             characters={word}
                             enabled={false}
                         />
@@ -52,7 +67,7 @@ export default function Game() {
                 }
             </section>
 
-            <Dictionary />
-        </>
+            <Dictionary word={state.word?.getCharacters()} />
+        </main>
     }
 }

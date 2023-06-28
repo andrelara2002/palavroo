@@ -1,22 +1,42 @@
-export default function Dictionary(characters = []) {
+import './DictionaryStyle.css'
+
+export default function Dictionary({ word }) {
+
+    const { characters } = word
+
     const dictionaryLetters = [
         //Qwerty letters
         'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
         'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
         'Z', 'X', 'C', 'V', 'B', 'N', 'M',
     ]
-    return characters.map((character, index) => {
 
-        let type = 'letter '
 
-        if (character.dead) type += 'incorrect'
+    return <section className="dictionary">
+        {
+            dictionaryLetters.map((letter, index) => {
 
-        else if (character.close) type += 'close'
+                let type = 'letter '
 
-        else if (character.hit) type += 'correct'
+                characters.map((character) => {
 
-        else type += 'normal'
+                    if (letter === character.letter) {
 
-        return <span key={index} className={type}>{letter}</span>
-    })
+                        if (character.schema.dead) type += 'incorrect'
+
+                        else if (character.schema.close) type += 'close'
+
+                        else if (character.schema.hit) type += 'correct'
+                    }
+
+                    else type += 'normal'
+
+                })
+
+                return <span key={index} className={type}>{letter}</span>
+
+            })
+        }
+    </section>
+
 }

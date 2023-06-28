@@ -35,7 +35,7 @@ export default class StringProcessor {
 
         if (!word) console.error('No Word Passed to Serializer')
 
-        return word?.map((letter, index, word) => {
+        return word?.split('').map((letter, index, word) => {
 
             const times = word.filter(x => x === letter).length
 
@@ -69,5 +69,7 @@ export default class StringProcessor {
     getLength() {
         return this.schema.base_word.length
     }
+
+    getCharacters() { return this.schema }
 
 }
