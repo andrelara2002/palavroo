@@ -46,19 +46,42 @@ export default function Game() {
 
         function handleKeyPress(e) {
 
-            if (e.keyCode === 13) {
-                /* TODO: implement compare string function */
+            const { tries, line, col, word: { schema: { base_word } } } = state
 
-                setState({ ...state, col: 0, line: state.line + 1 })
-                return
+
+            switch (e.keyCode) {
+                case 13:
+
+                    const tried_word = new StringProcessor()
+
+                    tried_word.buildFrom(tries[line].schema.characters)
+
+                    const comparation = tried_word.compareWords(tried_word.schema.base_word, base_word)
+
+
+
+                    tries[line].schema = comparation
+
+                    console.log(tries)
+
+                    setState({ ...state, col: 0, line: line + 1, tries })
+
+                    return
+
+                case 8:
+
+                    tries[line].schema.characters[col - 1].schema.letter = ' '
+                    setState({ ...state, tries, col: state.col - 1 < 0 ? 0 : state.col - 1 })
+
+                    break
+
+                default:
+
+                    tries[line].schema.characters[col].schema.letter = e.key
+
+                    setState({ ...state, tries, col: state.col + 1 > 5 ? 5 : state.col + 1 })
+                    break
             }
-
-            const { tries, line, col } = state
-
-            tries[line].schema.characters[col].schema.letter = e.key
-
-            setState({ ...state, tries, col: state.col + 1 })
-
 
         }
 
