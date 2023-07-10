@@ -158,9 +158,11 @@ export default function Game() {
                         const row_key = v4()
 
                         return <LetterRow
+                            onClickCharacter={(character, e) => { setState({ ...state, col: e }) }}
                             characters={try_.schema.characters}
                             enabled={index === state.line}
                             key={row_key}
+                            selected_key={state.col}
                         />
                     })
                 }
