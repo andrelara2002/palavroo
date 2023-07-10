@@ -57,13 +57,21 @@ export default function Game() {
 
                     tried_word.buildFrom(tries[line].schema.characters)
 
+
                     const comparation = tried_word.compareWords(tried_word.schema.base_word, base_word)
+
+                    if (!comparation) {
+                        alert('Missing letters')
+                        return
+                    }
+
 
                     tries[line].schema = comparation
 
                     const { characters } = comparation
 
                     let letter_pool
+
 
                     characters.forEach(character => {
 
@@ -72,6 +80,7 @@ export default function Game() {
                         let new_character
 
                         letter_pool = state.letter_pool
+
 
                         if (found) {
 
@@ -100,6 +109,10 @@ export default function Game() {
                     setState({ ...state, tries, col: state.col - 1 < 0 ? 0 : state.col - 1 })
 
                     break
+
+                /* TODO: Implement keyboard arrows */
+
+                /* TODO: Implement ignore keyboard action keys */
 
                 default:
 

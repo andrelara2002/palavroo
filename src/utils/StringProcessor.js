@@ -83,6 +83,9 @@ export default class StringProcessor {
     }
 
     compareWords(word1, word2) {
+
+        if (word1.replaceAll(' ', '').length !== word2.replaceAll(' ', '').length) return false
+
         const length = Math.max(word1.length, word2.length);
 
         for (let i = 0; i < length; i++) {
