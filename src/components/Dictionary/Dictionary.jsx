@@ -11,9 +11,6 @@ export default function Dictionary({ characters }) {
         'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter'
     ]
 
-
-    /* TODO: Implement colors in dictionary */
-
     /* TODO: Implement onclick functions */
 
 
@@ -40,7 +37,7 @@ export default function Dictionary({ characters }) {
                 })
 
                 if (!type) type += ' bg-slate-800'
-                
+
                 return <span key={v4()} className={`p-2 rounded-md font-bold text-slate-100 ${letter.length > 1 ? 'col-span-2' : ''} ${type}`}>{letter}</span>
 
             })
