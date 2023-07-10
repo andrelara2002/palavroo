@@ -1,12 +1,12 @@
-class Character {
+export class Character {
 
-    constructor(letter, times = 0) {
+    constructor(letter, times = 0, close = false, hit = false, dead = false) {
         this.schema = {
             letter,
-            close: false,
-            hit: false,
+            close,
+            hit,
             times,
-            dead: false
+            dead
         }
     }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { Audio } from 'react-loader-spinner'
-import StringProcessor from '../../utils/StringProcessor'
+import StringProcessor, { Character } from '../../utils/StringProcessor'
 import LetterRow from '../../components/Row/Row'
 import Dictionary from '../../components/Dictionary/Dictionary'
 
@@ -15,6 +15,7 @@ export default function Game() {
     const [state, setState] = useState({
         word: undefined,
         tries: undefined,
+        letter_pool: [],
         loading: true,
         lifes: 8,
         line: 0,
@@ -58,13 +59,38 @@ export default function Game() {
 
                     const comparation = tried_word.compareWords(tried_word.schema.base_word, base_word)
 
-
-
                     tries[line].schema = comparation
 
-                    console.log(tries)
+                    const { characters } = comparation
 
-                    setState({ ...state, col: 0, line: line + 1, tries })
+                    let letter_pool
+
+                    characters.forEach(character => {
+
+                        const found = state.letter_pool.find(x => x?.schema.letter === character.schema.letter)
+
+                        let new_character
+
+                        letter_pool = state.letter_pool
+
+                        if (found) {
+
+                            const { letter, times, close, hit, dead } = found.schema
+
+                            new_character = new Character(letter, times, close || character.schema.close, hit || character.schema.hit, dead || character.schema.dead)
+
+                            delete letter_pool[letter_pool.indexOf(found)]
+
+                        }
+
+                        else new_character = character
+
+                        letter_pool.push(new_character)
+
+                    })
+
+                    console.log(letter_pool)
+                    setState({ ...state, col: 0, line: line + 1, tries, letter_pool })
 
                     return
 
@@ -83,6 +109,7 @@ export default function Game() {
                     break
             }
 
+
         }
 
         window.addEventListener('keydown', handleKeyPress)
@@ -91,6 +118,8 @@ export default function Game() {
         return () => {
             window.removeEventListener('keydown', handleKeyPress)
         }
+
+
     }, [state])
 
 
@@ -108,6 +137,7 @@ export default function Game() {
 
 
     else {
+        /* TODO: Add word to the top */
         return <main className='bg-slate-950 h-screen grid place-items-center align-middle' >
             <section>
                 {
@@ -123,7 +153,7 @@ export default function Game() {
                 }
             </section>
 
-            <Dictionary word={state.word?.getCharacters()} />
+            <Dictionary characters={state.letter_pool} />
         </main >
     }
 }
